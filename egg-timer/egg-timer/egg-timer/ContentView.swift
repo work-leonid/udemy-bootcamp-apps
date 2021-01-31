@@ -12,6 +12,7 @@ struct ContentView: View {
     @State private var currentProgress = 0.0
     @State private var totalProgress: Double = 100
 
+    @State private var newTimer = Date()
     @State private var isTimerRunning = false
     @State private var timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     
@@ -24,7 +25,7 @@ struct ContentView: View {
     }
     
     func startTimer() {
-        isTimerRunning = true
+//        isTimerRunning = true
         self.timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     }
     
@@ -40,16 +41,18 @@ struct ContentView: View {
         VStack {
             ForEach(0..<3) { item in
                 Button(action: {
-                    totalProgress = Double(eggsTimer[item])
-                    startTimer()
+                    stopTimer()
+                    currentProgress = 0
                     
                     if isTimerRunning {
-                        self.stopTimer()
+                        stopTimer()
                     } else {
-                        self.startTimer()
-//
+                        newTimer = Date()
+                        startTimer()
                     }
-                }) {
+                    isTimerRunning.toggle()
+                    totalProgress = Double(eggsTimer[item])
+              }) {
                     Text("Button")
                         .padding()
                 }
@@ -63,6 +66,7 @@ struct ContentView: View {
         }
         .onReceive(timer) { time in
             finish()
+            
         }
     }
     

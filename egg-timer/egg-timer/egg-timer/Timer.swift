@@ -15,29 +15,38 @@ struct TimerView: View {
 
     var body: some View {
 
-        Text(self.timerString)
-            .font(Font.system(.largeTitle, design: .monospaced))
-            .onReceive(timer) { _ in
-                if self.isTimerRunning {
-                    timerString = String(format: "%.2f", (Date().timeIntervalSince( self.startTime)))
-                }
+        VStack {
+            Button(action: {
+                stopTimer()
+                timerString = "0.00"
+            }) {
+                Text("Reset")
             }
-            .onTapGesture {
-                if isTimerRunning {
-                    // stop UI updates
+            Text(self.timerString)
+                .font(Font.system(.largeTitle, design: .monospaced))
+                .onReceive(timer) { _ in
+                    if self.isTimerRunning {
+                        timerString = String(format: "%.2f", (Date().timeIntervalSince( self.startTime)))
+                    }
+                }
+                .onTapGesture {
+                    if isTimerRunning {
+                        // stop UI updates
+                        self.stopTimer()
+                    } else {
+                        timerString = "0.00"
+                        startTime = Date()
+                        // start UI updates
+                        self.startTimer()
+                    }
+                    isTimerRunning.toggle()
+                }
+                .onAppear() {
+                    // no need for UI updates at startup
                     self.stopTimer()
-                } else {
-                    timerString = "0.00"
-                    startTime = Date()
-                    // start UI updates
-                    self.startTimer()
                 }
-                isTimerRunning.toggle()
-            }
-            .onAppear() {
-                // no need for UI updates at startup
-                self.stopTimer()
-            }
+        }
+        
     }
     
     func stopTimer() {

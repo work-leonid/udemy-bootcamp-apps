@@ -40,36 +40,23 @@ struct ContentView: View {
         VStack {
             ForEach(0..<3) { item in
                 Button(action: {
+                    totalProgress = Double(eggsTimer[item])
+                    startTimer()
                     
                     if isTimerRunning {
                         self.stopTimer()
                     } else {
-                        totalProgress = Double(eggsTimer[item])
                         self.startTimer()
-                        
+//
                     }
-                    
-//                    isTimerRunning.toggle()
-                    
-                    
                 }) {
                     Text("Button")
                         .padding()
-                        
                 }
-                
-                
             }
 
             ProgressView("Progress: \(currentProgress, specifier: "%.f") / \(totalProgress, specifier: "%.f")", value: currentProgress, total: totalProgress)
                     .padding()
-            
-            if isTimerRunning {
-                Text("Timer is running")
-            } else {
-                Text("")
-            }
-            
         }
         .onAppear() {
             stopTimer()
